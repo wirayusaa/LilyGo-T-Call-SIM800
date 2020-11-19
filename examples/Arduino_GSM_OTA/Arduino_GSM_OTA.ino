@@ -3,9 +3,9 @@
  */
 
 // Your GPRS credentials (leave empty, if missing)
-const char apn[]      = ""; // Your APN
-const char gprsUser[] = ""; // User
-const char gprsPass[] = ""; // Password
+const char apn[]      = "axis"; // Your APN
+const char gprsUser[] = "axis"; // User
+const char gprsPass[] = "123456"; // Password
 const char simPIN[]   = ""; // SIM card PIN code, if any
 
 // URL to download the firmware from
