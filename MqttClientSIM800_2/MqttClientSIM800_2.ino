@@ -52,8 +52,8 @@
 #define MODEM_RST            5
 #define MODEM_PWKEY          4
 #define MODEM_POWER_ON       23
-#define MODEM_TX             27
-#define MODEM_RX             26
+#define MODEM_TX             26
+#define MODEM_RX             27
 #define I2C_SDA              21
 #define I2C_SCL              22
 
@@ -90,12 +90,12 @@
 #define GSM_PIN ""
 
 // Your GPRS credentials, if any
-//const char apn[] = "AXIS";
-//const char gprsUser[] = "axis";
-//const char gprsPass[] = "123456";
-const char apn[] = "telkomsel";
-const char gprsUser[] = "wap";
-const char gprsPass[] = "wap123";
+const char apn[] = "AXIS";
+const char gprsUser[] = "axis";
+const char gprsPass[] = "123456";
+//const char apn[] = "telkomsel";
+//const char gprsUser[] = "wap";
+//const char gprsPass[] = "wap123";
 
 // Your WiFi connection credentials, if applicable
 const char wifiSSID[] = "MARINA E93";
@@ -135,7 +135,7 @@ TinyGsm modem(SerialAT);
 TinyGsmClient client(modem);
 PubSubClient mqtt(client);
 
-#define LED_PIN 21
+#define LED_PIN 13
 int ledStatus = LOW;
 
 uint32_t lastReconnectAttempt = 0;

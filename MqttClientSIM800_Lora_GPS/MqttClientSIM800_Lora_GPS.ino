@@ -45,8 +45,8 @@ String packSize = "--";
 String packet ;
 
 // GPS Ublox Neo M6 pin definitions
-#define GPS_TX             0
-#define GPS_RX             2
+#define GPS_TX             22
+#define GPS_RX             26
 TinyGPSPlus gps; 
 
 // Select your modem:
@@ -74,10 +74,10 @@ TinyGPSPlus gps;
 #define MODEM_RST            5
 #define MODEM_PWKEY          4
 #define MODEM_POWER_ON       23
-#define MODEM_TX             27
-#define MODEM_RX             26
-#define I2C_SDA              21
-#define I2C_SCL              22
+#define MODEM_TX             17
+#define MODEM_RX             16
+//#define I2C_SDA              21
+//#define I2C_SCL              22
 
 
 // Set serial for debug console (to the Serial Monitor, default speed 115200)
@@ -85,11 +85,11 @@ TinyGPSPlus gps;
 
 // Set serial for AT commands (to the module)
 // Use Hardware Serial on Mega, Leonardo, Micro
-#define SerialAT Serial1
+#define SerialAT Serial2
 
 // Set serial for GPS Data (to the module)
 // Use Hardware Serial on Mega, Leonardo, Micro
-#define Seri Serial2
+#define Seri Serial1
 
 // or Software Serial on Uno, Nano
 //#include <SoftwareSerial.h>
@@ -122,6 +122,9 @@ const char gprsPass[] = "123456";
 //const char apn[] = "telkomsel";
 //const char gprsUser[] = "wap";
 //const char gprsPass[] = "wap123";
+//const char apn[] = "internet";
+//const char gprsUser[] = "";
+//const char gprsPass[] = "";
 
 // Your WiFi connection credentials, if applicable
 const char wifiSSID[] = "MARINA E93";
@@ -222,7 +225,7 @@ void setup() {
   digitalWrite(MODEM_POWER_ON, HIGH);
 
   SerialMon.println("Wait...");
-  Seri.begin(9600, SERIAL_8N1, GPS_TX, GPS_RX);   //0-TX 2-RX
+  Seri.begin(9600, SERIAL_8N1, GPS_RX, GPS_TX);   //0-TX 2-RX
   delay(100);
   while (!Serial);
   Serial.println();
@@ -359,7 +362,7 @@ Serial.println(String(counter));
     return;
   }
 
-//  mqtt.publish(topicInit, "GsmClientTest started2");
+  mqtt.publish(topicInit, "GsmClientTest started2");
   mqtt.loop();
 }
 
