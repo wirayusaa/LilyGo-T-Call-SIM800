@@ -4,9 +4,6 @@
 #include <LoRa.h>
 
 
-
-
-
 //========================================================================================
 // The serial connection to the GPS device
 #define ss Serial2
@@ -88,9 +85,13 @@ char jsonnodeGSM800String[850];
 const char apn[] = "AXIS";
 const char gprsUser[] = "axis";
 const char gprsPass[] = "123456";
+//const char apn[] = "internet";
+//const char gprsUser[] = "";
+//const char gprsPass[] = "";
+
 
 // MQTT details
-const char *broker = "iot.elefante.co.id";
+const char *broker = "trace.elefante.co.id";
 
 const char *topicLed = "GsmClientTest/led";
 const char *topicInit = "GsmClientTest/init";
@@ -189,8 +190,9 @@ boolean mqttConnect()
         return false;
     }
     SerialMon.println(" success");
-    mqtt.publish(topicInit, "GsmClientTest started");
-    mqtt.subscribe(topicLed);
+    //mqtt.publish(topicInit, "GsmClientTest started");
+     mqtt.publish("tracking/33", jsonnodeGSM800String);
+    mqtt.subscribe("tracking/33");
     return mqtt.connected();
 }
 //=========================================
@@ -249,7 +251,7 @@ void MqttSIM800setup()
     }
 
     // MQTT Broker setup
-    mqtt.setServer(broker, 184);
+    mqtt.setServer(broker, 185);
     mqtt.setCallback(mqttCallback);
 }
 
@@ -368,24 +370,27 @@ void JsonLoop()
 
 //JsonLora Integrated
   DynamicJsonDocument jsonnodeLora(700);
-  jsonnodeLora["counter"] = count;
-   jsonnodeLora["nodeid"] = 33;
-  jsonnodeLora["LoraSignal"] = rssi;
+//  jsonnodeLora["counter"] = count;
+   jsonnodeLora["nodeid"] = 0;
+  jsonnodeLora["signal"] = 0;
   jsonnodeLora["battery"] = 0.4;
-//  jsonnodeLora["context"] = "";
+  jsonnodeLora["context"] = "";
   jsonnodeLora["location"] = location;
 //jsonnodeLora["sensor"] = sensor;
+jsonnodeLora["time"] = count;
+
 
 
 //JsonLora Integrated
   DynamicJsonDocument jsonnodeGSM800(700);
   jsonnodeGSM800["counter"] = count;
-  jsonnodeGSM800["nodeid"] = 33;
-  jsonnodeGSM800["LoraSignal"] = rssi;
+  jsonnodeGSM800["nodeid"] = 1;
+  jsonnodeGSM800["signal"] = rssi;
   jsonnodeGSM800["battery"] = 0.4;
   jsonnodeGSM800["context"] = "";
   jsonnodeGSM800["location"] = location;
   jsonnodeGSM800["sensor"] = sensor;
+  jsonnodeGSM800["time"] = count;
 
 // {"nodeid":33,"signal":12,"battery":0.4,"context":"","location":{"lat":-7.293284,"long":112.8111,"altitude":17},"sensor":{"temperature":[{"sensorid":"33-1-temperature","value":25,"context":""},{"sensorid":"33-2-temperature","value":45,"context":""}],"level":[{"sensorid":"33-1-level","value":10,"context":""},{"sensorid":"33-2-level","value":6,"context":""}],"gas":[{"sensorid":"33-1-CO","value":23,"context":""},{"sensorid":"33-1-NH3"}]}}
 
@@ -455,7 +460,9 @@ void MqttSIM800loop()
         delay(100);
         return;
     }
-mqtt.publish("device/33", jsonnodeGSM800String);
+    delay(1000);
+    mqtt.publish("tracking/33", jsonnodeGSM800String);
+    delay(1000);
     mqtt.loop();
     
     delay(100);
@@ -468,7 +475,7 @@ void loop()
  JsonLoop();
  LoraLoop();
  MqttSIM800loop();
- delay(10000);
+ delay(300000);
 }
 
 //========================================================================================
