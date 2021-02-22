@@ -13,6 +13,10 @@
 //loncat lora sim800 
 int skipp = 300;
 int delta = 60;
+float tmaxH ;
+float tmaxT ;
+float tminH ;
+float tminT ;
 
 //========================================================================================
 //Variabel Sensor
@@ -205,7 +209,7 @@ const char gprsPass[] = "123456";
 
 // MQTT details
 //const char deviceId = "el0001";
-const char *broker = "trace.elefante.co.id";
+const char *broker = "iot.elefante.co.id";
 
 const char *topicLed = "GsmClientTest/led";
 const char *topicInit = "GsmClientTest/init";
@@ -295,78 +299,117 @@ void mqttCallback(char *topic, byte *payload, unsigned int length)
     SerialMon.write(payload, length);
     SerialMon.println();
     
-//    String messageTemp;
-//    for (int i = 0; i < length; i++) {
-//    Serial.print((char)message[i]);
-//    messageTemp += (char)message[i];
-//    }
-//    Serial.println();
+    String messageTemp;
+    for (int i = 0; i < length; i++) {
+    Serial.print((char)payload[i]);
+    messageTemp += (char)payload[i];
+    }
+    Serial.println();
      
 
     // Only proceed if incoming message's topic matches
     if (String(topic) == "/setting/el0001/tminT") {
     // Allocate the correct amount of memory for the payload copy
-    byte* tminT = (byte*)malloc(length);
-    Serial.print("Minimum Temperatur Threshold Berubah = ");
-    SerialMon.write(payload, length);
-    Serial.println();
-    // Copy the payload to the new buffer
-    memcpy(tminT,payload,length);
-    mqtt.publish("/confirm/setting/el0001/tminT", tminT, length);
-    // Free the memory
-    free(tminT);
+    tminT = messageTemp.toFloat();
+    Serial.print("Minimum Temepratur Threshold Berubah = ");
+    SerialMon.print(tminT);
+    SerialMon.println(" C");
+    char tminTString[length+1];
+    messageTemp.toCharArray(tminTString,length+1);
+    mqtt.publish("/confirm/setting/el0001/tminT", tminTString);
+    
+//    byte* tminT = (byte*)malloc(length);
+//    Serial.print("Minimum Temperatur Threshold Berubah = ");
+//    SerialMon.write(payload, length);
+//    Serial.println();
+//    // Copy the payload to the new buffer
+//    memcpy(tminT,payload,length);
+//    mqtt.publish("/confirm/setting/el0001/tminT", tminT, length);
+//    // Free the memory
+//    free(tminT);
     }
     
-    if (String(topic) == "/setting/el0001/tmaxT") {
-    // Allocate the correct amount of memory for the payload copy
-    byte* tmaxT = (byte*)malloc(length);
-    Serial.print("Maximum Temperatur Threshold Berubah = ");
-    SerialMon.write(payload, length);
-    Serial.println();
-    // Copy the payload to the new buffer
-    memcpy(tmaxT,payload,length);
-    mqtt.publish("/confirm/setting/el0001/tmaxT", tmaxT, length);
-    // Free the memory
-    free(tmaxT);
-    }
-
     if (String(topic) == "/setting/el0001/tminH") {
     // Allocate the correct amount of memory for the payload copy
-    byte* tminH = (byte*)malloc(length);
+    tminH = messageTemp.toFloat();
     Serial.print("Minimum Humidity Threshold Berubah = ");
-    SerialMon.write(payload, length);
-    Serial.println();
-    // Copy the payload to the new buffer
-    memcpy(tminH,payload,length);
-    mqtt.publish("/confirm/setting/el0001/tminH", tminH, length);
-    // Free the memory
-    free(tminH);
+    SerialMon.print(tminH);
+    SerialMon.println(" %");
+    char tminHString[length+1];
+    messageTemp.toCharArray(tminHString,length+1);
+    mqtt.publish("/confirm/setting/el0001/tminH", tminHString);
+    
+//    byte* tmaxT = (byte*)malloc(length);
+//    Serial.print("Maximum Temperatur Threshold Berubah = ");
+//    SerialMon.write(payload, length);
+//    Serial.println();
+//    // Copy the payload to the new buffer
+//    memcpy(tmaxT,payload,length);
+//    mqtt.publish("/confirm/setting/el0001/tmaxT", tmaxT, length);
+//    // Free the memory
+//    free(tmaxT);
+    }
+
+    if (String(topic) == "/setting/el0001/tmaxT") {
+    // Allocate the correct amount of memory for the payload copy
+    tmaxT = messageTemp.toFloat();
+    Serial.print("Maximum Temperatur Threshold Berubah = ");
+    SerialMon.print(tmaxT);
+    SerialMon.println(" C");
+    char tmaxTString[length+1];
+    messageTemp.toCharArray(tmaxTString,length+1);
+    mqtt.publish("/confirm/setting/el0001/tmaxT", tmaxTString);
+//    byte* tminH = (byte*)malloc(length);
+//    Serial.print("Minimum Humidity Threshold Berubah = ");
+//    SerialMon.write(payload, length);
+//    Serial.println();
+//    // Copy the payload to the new buffer
+//    memcpy(tminH,payload,length);
+//    mqtt.publish("/confirm/setting/el0001/tminH", tminH, length);
+//    // Free the memory
+//    free(tminH);
     }
 
     if (String(topic) == "/setting/el0001/tmaxH") {
     // Allocate the correct amount of memory for the payload copy
-    byte* tmaxH = (byte*)malloc(length);
+    tmaxH = messageTemp.toFloat();
     Serial.print("Maximum Humidity Threshold Berubah = ");
-    SerialMon.write(payload, length);
-    Serial.println();
-    // Copy the payload to the new buffer
-    memcpy(tmaxH,payload,length);
-    mqtt.publish("/confirm/setting/el0001/tmaxH", tmaxH, length);
-    // Free the memory
-    free(tmaxH);
+    SerialMon.print(tmaxH);
+    SerialMon.println(" %");
+    char tmaxHString[length+1];
+    messageTemp.toCharArray(tmaxHString,length+1);
+    mqtt.publish("/confirm/setting/el0001/tmaxH", tmaxHString);
+    
+//    byte* tmaxH = (byte*)malloc(length);
+//    Serial.print("Maximum Humidity Threshold Berubah = ");
+//    SerialMon.write(payload, length);
+//    Serial.println();
+//    // Copy the payload to the new buffer
+//    memcpy(tmaxH,payload,length);
+//    mqtt.publish("/confirm/setting/el0001/tmaxH", tmaxH, length);
+//    // Free the memory
+//    free(tmaxH);
     }
+    
     if (String(topic) == "/setting/el0001/sampling") {
     // Allocate the correct amount of memory for the payload copy
-    byte* sampling = (byte*)malloc(length);
-//    delta = sampling
+    delta = messageTemp.toInt();
     Serial.print("waktu sampling  Berubah = ");
-    SerialMon.write(payload, length);
-    Serial.println();
-    // Copy the payload to the new buffer
-    memcpy(sampling,payload,length);
-    mqtt.publish("/confirm/setting/el0001/sampling", sampling, length);
+    SerialMon.print(delta);
+    SerialMon.println(" second");
+    char deltaString[length+1];
+    messageTemp.toCharArray(deltaString,length+1);
+    mqtt.publish("/confirm/setting/el0001/sampling", deltaString);
+//    byte* sampling = (byte*)malloc(length);
+////    delta = sampling
+//    Serial.print("waktu sampling  Berubah = ");
+//    SerialMon.write(payload, length);
+//    Serial.println();
+//    // Copy the payload to the new buffer
+//    memcpy(sampling,payload,length);
+    
     // Free the memory
-    free(sampling);
+//    free(sampling);
     }
     if (String(topic) == "/reqCurrentData/el0001") {
     // Allocate the correct amount of memory for the payload copy
