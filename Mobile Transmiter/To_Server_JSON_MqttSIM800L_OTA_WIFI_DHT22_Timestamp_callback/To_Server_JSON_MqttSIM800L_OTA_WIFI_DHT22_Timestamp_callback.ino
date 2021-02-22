@@ -8,10 +8,11 @@
 #include <ESPmDNS.h>
 #include <Update.h>
 #include "DHT.h"
+
 //========================================================================================
 //loncat lora sim800 
 int skipp = 300;
-int delta = 10;
+int delta = 60;
 
 //========================================================================================
 //Variabel Sensor
@@ -28,87 +29,87 @@ DHT dht(DHTPIN, DHTTYPE); // Initialize DHT sensor for normal 16mhz Arduino
 float ValueTemperatur1=0;
 float ValueHumidity1=0;
 //========================================================================================
-//OTa WIFI Variable
-
-const char* host = "esp32";
-const char* ssid = "MARINA E93";
-const char* password = "gh0stpr0t0c0l";
+////OTa WIFI Variable
+//
+//const char* host = "esp32";
+//const char* ssid = "Elefante_Network";
+//const char* password = "Elefante.123";
 
 //=========================================================
 //OTa WIFI Variable
 
-WebServer server(80);
-
-/* Style */
-String style =
-"<style>#file-input,input{width:100%;height:44px;border-radius:4px;margin:10px auto;font-size:15px}"
-"input{background:#f1f1f1;border:0;padding:0 15px}body{background:#3498db;font-family:sans-serif;font-size:14px;color:#777}"
-"#file-input{padding:0;border:1px solid #ddd;line-height:44px;text-align:left;display:block;cursor:pointer}"
-"#bar,#prgbar{background-color:#f1f1f1;border-radius:10px}#bar{background-color:#3498db;width:0%;height:10px}"
-"form{background:#fff;max-width:258px;margin:75px auto;padding:30px;border-radius:5px;text-align:center}"
-".btn{background:#3498db;color:#fff;cursor:pointer}</style>";
-
-/* Login page */
-String loginIndex = 
-"<form name=loginForm>"
-"<h1>ELEFANTE</h1>"
-"<h1>Device Login</h1>"
-"<input name=userid placeholder='User ID'> "
-"<input name=pwd placeholder=Password type=Password> "
-"<input type=submit onclick=check(this.form) class=btn value=Login></form>"
-"<script>"
-"function check(form) {"
-"if(form.userid.value=='elefante' && form.pwd.value=='Elefante.123')"
-"{window.open('/serverIndex')}"
-"else"
-"{alert('Error Password or Username')}"
-"}"
-"</script>" + style;
-
-/* Server Index Page */
-String serverIndex = 
-"<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>"
-"<form method='POST' action='#' enctype='multipart/form-data' id='upload_form'>"
-"<input type='file' name='update' id='file' onchange='sub(this)' style=display:none>"
-"<label id='file-input' for='file'>   Choose file...</label>"
-"<input type='submit' class=btn value='Update'>"
-"<br><br>"
-"<div id='prg'></div>"
-"<br><div id='prgbar'><div id='bar'></div></div><br></form>"
-"<script>"
-"function sub(obj){"
-"var fileName = obj.value.split('\\\\');"
-"document.getElementById('file-input').innerHTML = '   '+ fileName[fileName.length-1];"
-"};"
-"$('form').submit(function(e){"
-"e.preventDefault();"
-"var form = $('#upload_form')[0];"
-"var data = new FormData(form);"
-"$.ajax({"
-"url: '/update',"
-"type: 'POST',"
-"data: data,"
-"contentType: false,"
-"processData:false,"
-"xhr: function() {"
-"var xhr = new window.XMLHttpRequest();"
-"xhr.upload.addEventListener('progress', function(evt) {"
-"if (evt.lengthComputable) {"
-"var per = evt.loaded / evt.total;"
-"$('#prg').html('progress: ' + Math.round(per*100) + '%');"
-"$('#bar').css('width',Math.round(per*100) + '%');"
-"}"
-"}, false);"
-"return xhr;"
-"},"
-"success:function(d, s) {"
-"console.log('success!') "
-"},"
-"error: function (a, b, c) {"
-"}"
-"});"
-"});"
-"</script>" + style;
+//WebServer server(80);
+//
+///* Style */
+//String style =
+//"<style>#file-input,input{width:100%;height:44px;border-radius:4px;margin:10px auto;font-size:15px}"
+//"input{background:#f1f1f1;border:0;padding:0 15px}body{background:#3498db;font-family:sans-serif;font-size:14px;color:#777}"
+//"#file-input{padding:0;border:1px solid #ddd;line-height:44px;text-align:left;display:block;cursor:pointer}"
+//"#bar,#prgbar{background-color:#f1f1f1;border-radius:10px}#bar{background-color:#3498db;width:0%;height:10px}"
+//"form{background:#fff;max-width:258px;margin:75px auto;padding:30px;border-radius:5px;text-align:center}"
+//".btn{background:#3498db;color:#fff;cursor:pointer}</style>";
+//
+///* Login page */
+//String loginIndex = 
+//"<form name=loginForm>"
+//"<h1>ELEFANTE</h1>"
+//"<h1>Device Login</h1>"
+//"<input name=userid placeholder='User ID'> "
+//"<input name=pwd placeholder=Password type=Password> "
+//"<input type=submit onclick=check(this.form) class=btn value=Login></form>"
+//"<script>"
+//"function check(form) {"
+//"if(form.userid.value=='elefante' && form.pwd.value=='Elefante.123')"
+//"{window.open('/serverIndex')}"
+//"else"
+//"{alert('Error Password or Username')}"
+//"}"
+//"</script>" + style;
+//
+///* Server Index Page */
+//String serverIndex = 
+//"<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>"
+//"<form method='POST' action='#' enctype='multipart/form-data' id='upload_form'>"
+//"<input type='file' name='update' id='file' onchange='sub(this)' style=display:none>"
+//"<label id='file-input' for='file'>   Choose file...</label>"
+//"<input type='submit' class=btn value='Update'>"
+//"<br><br>"
+//"<div id='prg'></div>"
+//"<br><div id='prgbar'><div id='bar'></div></div><br></form>"
+//"<script>"
+//"function sub(obj){"
+//"var fileName = obj.value.split('\\\\');"
+//"document.getElementById('file-input').innerHTML = '   '+ fileName[fileName.length-1];"
+//"};"
+//"$('form').submit(function(e){"
+//"e.preventDefault();"
+//"var form = $('#upload_form')[0];"
+//"var data = new FormData(form);"
+//"$.ajax({"
+//"url: '/update',"
+//"type: 'POST',"
+//"data: data,"
+//"contentType: false,"
+//"processData:false,"
+//"xhr: function() {"
+//"var xhr = new window.XMLHttpRequest();"
+//"xhr.upload.addEventListener('progress', function(evt) {"
+//"if (evt.lengthComputable) {"
+//"var per = evt.loaded / evt.total;"
+//"$('#prg').html('progress: ' + Math.round(per*100) + '%');"
+//"$('#bar').css('width',Math.round(per*100) + '%');"
+//"}"
+//"}, false);"
+//"return xhr;"
+//"},"
+//"success:function(d, s) {"
+//"console.log('success!') "
+//"},"
+//"error: function (a, b, c) {"
+//"}"
+//"});"
+//"});"
+//"</script>" + style;
 
 
 //========================================================================================
@@ -188,6 +189,7 @@ unsigned int count = 1;
 // set GSM PIN, if any
 #define GSM_PIN ""
 
+long lastMsg = 0;
 char jsonnodeGSM800String[850];
 String alldata;
 char alldatastring[850];
@@ -202,11 +204,28 @@ const char gprsPass[] = "123456";
 
 
 // MQTT details
-const char *broker = "iot.elefante.co.id";
+//const char deviceId = "el0001";
+const char *broker = "trace.elefante.co.id";
 
-//const char *topicLed = "GsmClientTest/led";
-//const char *topicInit = "GsmClientTest/init";
-//const char *topicLedStatus = "GsmClientTest/ledStatus";
+const char *topicLed = "GsmClientTest/led";
+const char *topicInit = "GsmClientTest/init";
+const char *topicLedStatus = "GsmClientTest/ledStatus";
+const char *dataPub111 = "GsmClientTest/led";
+//const char *dataPub = String("data/")+deviceId;
+//const char *dataPub3= "GsmClientTest/led";
+//const char *dataPub3= "GsmClientTest/led";
+//mqtt.publish("data/el0001", alldatastring);
+//     mqtt.subscribe("setting/el0001/#");
+//    mqtt.subscribe("reqCurrentData/el0001/#");
+//
+//"currentData/el0001"
+//        "confirm/setting/el0001/reqData"
+//        "reqCurrentData/el0001"
+//        "confirm/setting/el0001/sampling"
+//        "setting/el0001/sampling"
+//        "confirm/setting/el0001/tmaxH"
+//        "setting/el0001/tmaxH"
+
 
 #ifdef DUMP_AT_COMMANDS
 #include <StreamDebugger.h>
@@ -263,24 +282,147 @@ uint32_t lastReconnectAttempt = 0;
 
 //MqttSIM800setup
 //========================================================================================
-void mqttCallback(char *topic, byte *payload, unsigned int len)
+void mqttCallback(char *topic, byte *payload, unsigned int length)
 {
+    // In order to republish this payload, a copy must be made
+    // as the orignal payload buffer will be overwritten whilst
+    // constructing the PUBLISH packet.
+    SerialMon.println();
+    SerialMon.println("=====================Mqtt Callback======================");
     SerialMon.print("Message arrived [");
     SerialMon.print(topic);
     SerialMon.print("]: ");
-    SerialMon.write(payload, len);
+    SerialMon.write(payload, length);
     SerialMon.println();
+    
+//    String messageTemp;
+//    for (int i = 0; i < length; i++) {
+//    Serial.print((char)message[i]);
+//    messageTemp += (char)message[i];
+//    }
+//    Serial.println();
+     
 
     // Only proceed if incoming message's topic matches
-    if (String(topic) == topicLed) {
-        ledStatus = !ledStatus;
-        digitalWrite(LED_GPIO, ledStatus);
-        mqtt.publish(topicLedStatus, ledStatus ? "1" : "0");
+    if (String(topic) == "/setting/el0001/tminT") {
+    // Allocate the correct amount of memory for the payload copy
+    byte* tminT = (byte*)malloc(length);
+    Serial.print("Minimum Temperatur Threshold Berubah = ");
+    SerialMon.write(payload, length);
+    Serial.println();
+    // Copy the payload to the new buffer
+    memcpy(tminT,payload,length);
+    mqtt.publish("/confirm/setting/el0001/tminT", tminT, length);
+    // Free the memory
+    free(tminT);
     }
+    
+    if (String(topic) == "/setting/el0001/tmaxT") {
+    // Allocate the correct amount of memory for the payload copy
+    byte* tmaxT = (byte*)malloc(length);
+    Serial.print("Maximum Temperatur Threshold Berubah = ");
+    SerialMon.write(payload, length);
+    Serial.println();
+    // Copy the payload to the new buffer
+    memcpy(tmaxT,payload,length);
+    mqtt.publish("/confirm/setting/el0001/tmaxT", tmaxT, length);
+    // Free the memory
+    free(tmaxT);
+    }
+
+    if (String(topic) == "/setting/el0001/tminH") {
+    // Allocate the correct amount of memory for the payload copy
+    byte* tminH = (byte*)malloc(length);
+    Serial.print("Minimum Humidity Threshold Berubah = ");
+    SerialMon.write(payload, length);
+    Serial.println();
+    // Copy the payload to the new buffer
+    memcpy(tminH,payload,length);
+    mqtt.publish("/confirm/setting/el0001/tminH", tminH, length);
+    // Free the memory
+    free(tminH);
+    }
+
+    if (String(topic) == "/setting/el0001/tmaxH") {
+    // Allocate the correct amount of memory for the payload copy
+    byte* tmaxH = (byte*)malloc(length);
+    Serial.print("Maximum Humidity Threshold Berubah = ");
+    SerialMon.write(payload, length);
+    Serial.println();
+    // Copy the payload to the new buffer
+    memcpy(tmaxH,payload,length);
+    mqtt.publish("/confirm/setting/el0001/tmaxH", tmaxH, length);
+    // Free the memory
+    free(tmaxH);
+    }
+    if (String(topic) == "/setting/el0001/sampling") {
+    // Allocate the correct amount of memory for the payload copy
+    byte* sampling = (byte*)malloc(length);
+//    delta = sampling
+    Serial.print("waktu sampling  Berubah = ");
+    SerialMon.write(payload, length);
+    Serial.println();
+    // Copy the payload to the new buffer
+    memcpy(sampling,payload,length);
+    mqtt.publish("/confirm/setting/el0001/sampling", sampling, length);
+    // Free the memory
+    free(sampling);
+    }
+    if (String(topic) == "/reqCurrentData/el0001") {
+    // Allocate the correct amount of memory for the payload copy
+    byte* reqData = (byte*)malloc(length);
+    Serial.print("Server Request curent Data Status = ");
+    SerialMon.write(payload, length);
+    Serial.println();
+    // Copy the payload to the new buffer
+    memcpy(reqData,payload,length);
+    mqtt.publish("/confirm/setting/el0001/reqData", reqData, length);
+    mqtt.publish("/currentData/el0001",alldatastring);
+    // Free the memory
+    free(reqData);
+    }
+//        
+//        // Only proceed if incoming message's topic matches
+//    if (String(topic) == "setting/el0001/tminT") { 
+//        unsigned char* tminT = payload;
+//        String payloadString = reinterpret_cast<const char*>(payload);
+//        char payloadChar[8];
+//       Serial.print("Minimum Temperatur Threshold Berubah = ");
+//       SerialMon.write(payload, len);
+//       payloadString.toCharArray(payloadChar,8);
+//       mqtt.publish("confirm/setting/el0001/tminT", payloadChar);
+//    }
 }
 //=========================================
+void reconnect() {
+  // Loop until we're reconnected
+  while (!mqtt.connected()) {
+    Serial.print("Attempting MQTT connection...");
+    // Attempt to connect
+    if (mqtt.connect("el001Client")) {
+      SerialMon.println("connected");
+      // Subscribe
+      mqtt.subscribe("/setting/el0001/#");
+      delay(100);
+      mqtt.subscribe("/reqCurrentData/el0001");
+      delay(100);
+    } else {
+      SerialMon.print("failed, rc=");
+      SerialMon.print(mqtt.state());
+      SerialMon.println(" try again in 5 seconds");
+      // Wait 5 seconds before retrying
+      delay(5000);
+    }
+  }
+}
+
+
+//=========================================
+
 boolean mqttConnect()
 {
+    SerialMon.println();
+    SerialMon.println("==================================Mqtt Connect=================================");
     SerialMon.print("Connecting to ");
     SerialMon.print(broker);
 
@@ -296,15 +438,20 @@ boolean mqttConnect()
     }
     count++;
     SerialMon.println(" success");
-    //mqtt.publish(topicInit, "GsmClientTest started");
+    mqtt.publish("/data/el0001", "mqttConnect()");
 //     mqtt.publish("data/el0001", jsonnodeGSM800String);
-     mqtt.publish("data/el0001", alldatastring);
-    mqtt.subscribe("data/el0001");
+//     mqtt.publish("data/el0001", alldatastring);
+//    mqtt.subscribe("data/el0001");
+//    mqtt.subscribe("setting/el0001/#");
+//    mqtt.subscribe("reqCurrentData/el0001/#");
+    
     return mqtt.connected();
 }
 //=========================================
 void MqttSIM800setup()
 {   
+    SerialMon.println();
+    SerialMon.println("==================================Mqtt Sim800 Setup=================================");
     setupModem();
 
     SerialMon.println("Wait...");
@@ -379,77 +526,79 @@ void MqttSIM800setup()
 
 //========================================================================================
 //WIFISetup
-void Wifi()
-{
-  // Connect to WiFi network
-  WiFi.begin(ssid, password);
-  Serial.println("");
-
-  // Wait for connection
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.print("Connected to ");
-  Serial.println(ssid);
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
-}
+//void Wifi()
+//{
+//  // Connect to WiFi network
+//  WiFi.begin(ssid, password);
+//  Serial.println("");
+//
+//  // Wait for connection
+//  while (WiFi.status() != WL_CONNECTED) {
+//    delay(500);
+//    Serial.print(".");
+//  }
+//  Serial.println("");
+//  Serial.print("Connected to ");
+//  Serial.println(ssid);
+//  Serial.print("IP address: ");
+//  Serial.println(WiFi.localIP());
+//}
 //========================================================================================
 //Ota Setup
 
-void OtaSetup()
-{
-/*use mdns for host name resolution*/
-  if (!MDNS.begin(host)) { //http://esp32.local
-    Serial.println("Error setting up MDNS responder!");
-    while (1) {
-      delay(1000);
-    }
-  }
-  Serial.println("mDNS responder started");
-  /*return index page which is stored in serverIndex */
-  server.on("/", HTTP_GET, []() {
-    server.sendHeader("Connection", "close");
-    server.send(200, "text/html", loginIndex);
-  });
-  server.on("/serverIndex", HTTP_GET, []() {
-    server.sendHeader("Connection", "close");
-    server.send(200, "text/html", serverIndex);
-  });
-  /*handling uploading firmware file */
-  server.on("/update", HTTP_POST, []() {
-    server.sendHeader("Connection", "close");
-    server.send(200, "text/plain", (Update.hasError()) ? "FAIL" : "OK");
-    ESP.restart();
-  }, []() {
-    HTTPUpload& upload = server.upload();
-    if (upload.status == UPLOAD_FILE_START) {
-      Serial.printf("Update: %s\n", upload.filename.c_str());
-      if (!Update.begin(UPDATE_SIZE_UNKNOWN)) { //start with max available size
-        Update.printError(Serial);
-      }
-    } else if (upload.status == UPLOAD_FILE_WRITE) {
-      /* flashing firmware to ESP*/
-      if (Update.write(upload.buf, upload.currentSize) != upload.currentSize) {
-        Update.printError(Serial);
-      }
-    } else if (upload.status == UPLOAD_FILE_END) {
-      if (Update.end(true)) { //true to set the size to the current progress
-        Serial.printf("Update Success: %u\nRebooting...\n", upload.totalSize);
-      } else {
-        Update.printError(Serial);
-      }
-    }
-  });
-  server.begin();
-}
+//void OtaSetup()
+//{
+///*use mdns for host name resolution*/
+//  if (!MDNS.begin(host)) { //http://esp32.local
+//    Serial.println("Error setting up MDNS responder!");
+//    while (1) {
+//      delay(1000);
+//    }
+//  }
+//  Serial.println("mDNS responder started");
+//  /*return index page which is stored in serverIndex */
+//  server.on("/", HTTP_GET, []() {
+//    server.sendHeader("Connection", "close");
+//    server.send(200, "text/html", loginIndex);
+//  });
+//  server.on("/serverIndex", HTTP_GET, []() {
+//    server.sendHeader("Connection", "close");
+//    server.send(200, "text/html", serverIndex);
+//  });
+//  /*handling uploading firmware file */
+//  server.on("/update", HTTP_POST, []() {
+//    server.sendHeader("Connection", "close");
+//    server.send(200, "text/plain", (Update.hasError()) ? "FAIL" : "OK");
+//    ESP.restart();
+//  }, []() {
+//    HTTPUpload& upload = server.upload();
+//    if (upload.status == UPLOAD_FILE_START) {
+//      Serial.printf("Update: %s\n", upload.filename.c_str());
+//      if (!Update.begin(UPDATE_SIZE_UNKNOWN)) { //start with max available size
+//        Update.printError(Serial);
+//      }
+//    } else if (upload.status == UPLOAD_FILE_WRITE) {
+//      /* flashing firmware to ESP*/
+//      if (Update.write(upload.buf, upload.currentSize) != upload.currentSize) {
+//        Update.printError(Serial);
+//      }
+//    } else if (upload.status == UPLOAD_FILE_END) {
+//      if (Update.end(true)) { //true to set the size to the current progress
+//        Serial.printf("Update Success: %u\nRebooting...\n", upload.totalSize);
+//      } else {
+//        Update.printError(Serial);
+//      }
+//    }
+//  });
+//  server.begin();
+//}
 //========================================================================================
 //Sensor Setup
 void SensorSetup()
 {
-  Serial.println("DHT22 sensor testing");
+  SerialMon.println();
+  SerialMon.println("==================================Sensor Setup=================================");
+  Serial.println("DHT22 sensor run");
   //Initialize the DHT sensor
   dht.begin();  //sensor suhu dan kelembapan 1 dht22
 }
@@ -457,22 +606,24 @@ void SensorSetup()
 void setup()
 {
   Serial.begin(115200);
-  Wifi();
+//  Wifi();
   SensorSetup();
-  OtaSetup();
+//  OtaSetup();
 //  GpsSetup();
 //  LoraSetup();
   MqttSIM800setup();
 }
 //========================================================================================
-void OtaLoop()
-{
-server.handleClient();
- delay(1);
-}
+//void OtaLoop()
+//{
+//server.handleClient();
+// delay(1);
+//}
 //========================================================================================
 //SEnsor Loop
 void SensorRead(){
+  SerialMon.println();
+  SerialMon.println("================sensor Read=================");
   
 //Sensor Level1=========================
 //DigitalLevel1=analogRead(PinLevel1);
@@ -577,11 +728,13 @@ float converted = 0.00;
 //========================================================================================
 void JsonLoop()
 {
-
+    SerialMon.println();
+   SerialMon.println("================Json Loop=================");
   //Variabel Device Parameter
     int csq = modem.getSignalQuality();
     DBG("Signal quality:", csq);
-    String gsmdate = modem.getGSMDateTime(DATE_FULL);
+    String gsmdate = modem.getGSMDateTime(DATE_DATE);
+    String gsmtime = modem.getGSMDateTime(DATE_TIME);
     DBG("DATETIME   :", gsmdate);
 //Variabel Sensor
   StaticJsonDocument<100> temperature1;
@@ -669,7 +822,7 @@ void JsonLoop()
 
   String CountString = String(count);
   String SignalString = String(csq);
-  String TimeString = gsmdate;
+  String TimeString = gsmdate+","+gsmtime;
   String Temperatur1String = String(ValueTemperatur1);
   String Humidity1String = String(ValueHumidity1);
   
@@ -733,46 +886,98 @@ alldata.toCharArray(alldatastring,850);
 //========================================================================================
 void MqttSIM800loop()
 {
-
+    SerialMon.println();
+  SerialMon.println("================Loop MqttSIM800=================");
     if (!mqtt.connected()) {
         SerialMon.println("=== MQTT NOT CONNECTED ===");
+        reconnect();
         // Reconnect every 10 seconds
-        uint32_t t = millis();
-        if (t - lastReconnectAttempt > 10000L) {
-            lastReconnectAttempt = t;
-            if (mqttConnect()) {
-                lastReconnectAttempt = 0;
-            }
-        }
-        delay(100);
-        return;
+//        uint32_t t = millis();
+//        if (t - lastReconnectAttempt > 1000L) {
+//            lastReconnectAttempt = t;
+//            if (mqttConnect()) {
+//            if (mqttConnect()) {
+//                lastReconnectAttempt = 0;
+//            }
+//        }
+//        delay(100);
+//        return;
     }
+    
     delay(100);
     count++;
 //    mqtt.publish("data/el0001", jsonnodeGSM800String);
-    mqtt.publish("data/el0001", alldatastring);
-    delay(100);
+//    mqtt.publish("/data/el0001", alldatastring);
+//    delay(100);
     mqtt.loop();
+
+    long now = millis();
+  if (now - lastMsg > delta * 1000) {
+    lastMsg = now;
+    mqtt.publish("/data/el0001", alldatastring);
+  }
+//    mqtt.subscribe("/setting/el0001/#");
+//    delay(100);
+//    mqtt.subscribe("/reqCurrentData/el0001");
+//    delay(100);
+//    if (skipp >= delta){
+//    skipp=0;
+//    // LoraLoop();
+//    // MqttSIM800loop();
+//    mqtt.publish("/data/el0001", alldatastring);
+//    delay(100);
+//   }
     
     delay(100);
 }
 //========================================================================================
-//RequestCurent data
+//mqttSim800Loop Subscribe
+//void MqttSubSIM800loop()
+//{
+//
+//    if (!mqtt.connected()) {
+//        SerialMon.println("=== MQTT NOT CONNECTED ===");
+//        // Reconnect every 10 seconds
+//        uint32_t t = millis();
+//        if (t - lastReconnectAttempt > 10000L) {
+//            lastReconnectAttempt = t;
+//            if (mqttConnect()) {
+//                lastReconnectAttempt = 0;
+//            }
+//        }
+//        delay(100);
+//        return;
+//    }
+//    delay(100);
+//    count++;
+////    mqtt.publish("data/el0001", jsonnodeGSM800String);
+////    mqtt.publish("data/el0001", alldatastring);
+//    mqtt.subscribe("/setting/el0001/#");
+//    mqtt.subscribe("/reqCurrentData/el0001");
+//    delay(100);
+//    mqtt.loop();
+//    
+//    delay(100);
+//}
 
 //========================================================================================
 void loop()
 {
+  SerialMon.println();
+  SerialMon.println("==================================loop header=================================");
  ++skipp;
- OtaLoop();
+// MqttSubSIM800loop();
+// OtaLoop();
  SensorRead();
 // GpsLoop();
  JsonLoop();
- if (skipp >= delta){
-  skipp=0;
-// LoraLoop();
  MqttSIM800loop();
- }
- delay(1000);
+// if (skipp >= delta){
+//  skipp=0;
+//// LoraLoop();
+// MqttSIM800loop();
+// }
+ delay(100);
 }
 
 //========================================================================================
