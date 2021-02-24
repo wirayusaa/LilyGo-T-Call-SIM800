@@ -10,6 +10,7 @@
 #include "DHT.h"
 
 //========================================================================================
+
 //loncat lora sim800 
 int skipp = 300;
 int delta = 60;
@@ -195,7 +196,9 @@ unsigned int count = 1;
 
 long lastMsg = 0;
 char jsonnodeGSM800String[850];
+String deviceInfo;
 String alldata;
+char deviceInfoString[850];
 char alldatastring[850];
 
 // Your GPRS credentials, if any
@@ -482,6 +485,7 @@ boolean mqttConnect()
     count++;
     SerialMon.println(" success");
     mqtt.publish("/data/el0001", "mqttConnect()");
+    SerialMon.println("mqttConnect()");
 //     mqtt.publish("data/el0001", jsonnodeGSM800String);
 //     mqtt.publish("data/el0001", alldatastring);
 //    mqtt.subscribe("data/el0001");
@@ -565,6 +569,27 @@ void MqttSIM800setup()
     // MQTT Broker setup
     mqtt.setServer(broker, 184);
     mqtt.setCallback(mqttCallback);
+
+    String gsmdate = modem.getGSMDateTime(DATE_DATE);
+    String gsmtime = modem.getGSMDateTime(DATE_TIME);
+    DBG("DATETIME   :", gsmdate);
+    String SignalString = String(csq);
+    String TimeString = gsmdate+","+gsmtime;
+
+    deviceInfo = String(TimeString + "?" + modemInfo + "?" + name + "?" + ccid + "?" + imei + "?" + cop + "?" + local + "?" + SignalString + "?" + 44 );
+    deviceInfo.toCharArray(deviceInfoString,850);
+    SerialMon.println(deviceInfoString);
+
+    SerialMon.println();
+    SerialMon.println("================Loop MqttSIM800=================");
+    if (!mqtt.connected()) {
+        SerialMon.println("=== MQTT NOT CONNECTED ===");
+        reconnect();
+        }
+    delay(100);
+    mqtt.loop();
+    mqtt.publish("/reqSetting/all", deviceInfoString);
+
 }
 
 //========================================================================================
